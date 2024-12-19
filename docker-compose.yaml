@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - './app:/var/www/html'
+      - './docker/nginx/conf.d:/etc/nginx/conf.d'
+    depends_on:
+      - php8
+
+  pgsql:
+    container_name: pgsql
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nft
+    volumes:
+      - './docker/volume/pgsql:/var/lib/postgresql/data'
+#      - './docker/volume/init.sql:/docker-entrypoint-initdb.d/init.sql'
+
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    ports:
+      - "8080:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_SERVER_1_HOST: pgsql
+      PGADMIN_SERVER_1_PORT: 5432
+      PGADMIN_SERVER_1_USERNAME: user
+      PGADMIN_SERVER_1_PASSWORD: password
+    depends_on:
+      - pgsql
+
+
+  php8:
+    container_name: php8
+    build:
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - './app:/var/www/html'
