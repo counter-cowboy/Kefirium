@@ -13,14 +13,7 @@ logs:
 	docker compose  logs --tail=100 -f $(c)
 ps:
 	docker ps -a
-migrate:
-	docker exec -it php php8 artisan migrate
-fresh:
-	docker exec -it php php8 artisan migrate:fresh
-seed:
-	docker exec -it php php8 artisan db:seed
-fresh-seed:
-	docker exec -it php php8 artisan migrate:fresh --seed
+
 test:
 	docker exec -it php php8 artisan test
 testdb:
