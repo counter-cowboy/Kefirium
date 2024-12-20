@@ -8,16 +8,16 @@ RUN apt-get install -y \
 RUN docker-php-ext-install pdo pdo_pgsql && docker-php-ext-enable pdo_pgsql
 
 
-#COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
-#COPY ../../app /var/www/html
+COPY ../../app /var/www/html
 
-#RUN composer install
-#RUN composer --version
+RUN composer install
+RUN composer --version
 
 
-#RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 
 CMD ["php-fpm"]

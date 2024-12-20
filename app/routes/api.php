@@ -1,24 +1,22 @@
 <?php
 
-use App\Http\Controllers\AuthGoogleController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\GoogleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('auth/google', [AuthGoogleController::class, 'redirectToGoogle']);
-Route::get('auth/google/callback', [AuthGoogleController::class, 'handleGoogleCallback']);
 
+Route::post('login', [LoginController::class, 'login']);
+Route::post('register', [RegisterController::class, 'register']);
+Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
+
+
+Route::get('auth/google', [GoogleController::class, 'redirect']);
+
+Route::get('auth/google/callback', [GoogleController::class, 'callback']);
