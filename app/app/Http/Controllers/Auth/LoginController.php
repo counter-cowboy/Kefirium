@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,9 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends Controller
 {
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): JsonResponse
     {
-       $data=$request->validated();
+        $data = $request->validated();
 
         if (Auth::attempt($data)) {
             $user = Auth::user();
@@ -26,7 +27,7 @@ class LoginController extends Controller
         return response()->json(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         $request->user()->tokens->each(function ($token) {
             $token->delete();
